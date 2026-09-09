@@ -216,10 +216,12 @@
   .typewriter-word {
     display: inline-block;
     text-align: left;
+    white-space: nowrap;
     border-right: 3px solid var(--gold-dark);
     padding-right: 0.08em;
     animation: typewriter-caret 0.8s steps(1) infinite;
   }
+  .typewriter-word::after { content: ','; }
   @keyframes typewriter-caret { 50% { border-color: transparent; } }
   .hero-title .blue-word { color: var(--blue-dark); }
 
@@ -901,7 +903,7 @@
       </div>
     </div>
     <h1 class="hero-title">
-      <span data-en="Powering" data-sw="Tunawezesha">Powering</span> <em class="typewriter-word" id="heroWord" data-en="Industry" data-sw="Viwanda">Industry</em>,<br>
+      <span data-en="Powering" data-sw="Tunawezesha">Powering</span> <em class="typewriter-word" id="heroWord" data-en="Industries" data-sw="Viwanda">Industries</em><br>
       <span data-en="Driving" data-sw="Kuchochea">Driving</span> <span class="blue-word" data-en="Progress" data-sw="Maendeleo">Progress</span>
     </h1>
     <p class="hero-sub" data-en="Mardos Power Generation Co. Ltd delivers world-class generator services — from advanced synchronization systems to cutting-edge software diagnostics for every major engine brand."
@@ -1580,7 +1582,7 @@ let typewriterTimer;
 let typewriterRun = 0;
 
 const typewriterWords = {
-  en: ['Industry', 'Companies', 'Organizations'],
+  en: ['Industries', 'Companies', 'Organizations'],
   sw: ['Viwanda', 'Makampuni', 'Taasisi']
 };
 
