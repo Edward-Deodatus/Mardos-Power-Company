@@ -213,6 +213,14 @@
     color: var(--navy); animation: fade-up 0.8s 0.4s both;
   }
   .hero-title em { font-style: normal; color: var(--gold-dark); }
+  .typewriter-word {
+    display: inline-block;
+    text-align: left;
+    border-right: 3px solid var(--gold-dark);
+    padding-right: 0.08em;
+    animation: typewriter-caret 0.8s steps(1) infinite;
+  }
+  @keyframes typewriter-caret { 50% { border-color: transparent; } }
   .hero-title .blue-word { color: var(--blue-dark); }
 
   .hero-sub {
@@ -893,7 +901,7 @@
       </div>
     </div>
     <h1 class="hero-title">
-      <span data-en="Powering" data-sw="Kuwezesha">Powering</span> <em data-en="Industry" data-sw="Viwanda">Industry</em>,<br>
+      <span data-en="Powering" data-sw="Tunawezesha">Powering</span> <em class="typewriter-word" id="heroWord" data-en="Industry" data-sw="Viwanda">Industry</em>,<br>
       <span data-en="Driving" data-sw="Kuchochea">Driving</span> <span class="blue-word" data-en="Progress" data-sw="Maendeleo">Progress</span>
     </h1>
     <p class="hero-sub" data-en="Mardos Power Generation Co. Ltd delivers world-class generator services — from advanced synchronization systems to cutting-edge software diagnostics for every major engine brand."
@@ -1568,6 +1576,56 @@ document.addEventListener('click', function(e) {
 });
 
 let currentLang = 'en';
+let typewriterTimer;
+let typewriterRun = 0;
+
+const typewriterWords = {
+  en: ['Industry', 'Companies', 'Organizations'],
+  sw: ['Viwanda', 'Makampuni', 'Taasisi']
+};
+
+function startHeroTypewriter() {
+  const wordElement = document.getElementById('heroWord');
+  if (!wordElement) return;
+
+  clearTimeout(typewriterTimer);
+  const run = ++typewriterRun;
+  const words = typewriterWords[currentLang];
+  let wordIndex = 0;
+  let characterIndex = 0;
+  let deleting = false;
+
+  function typeNext() {
+    if (run !== typewriterRun) return;
+
+    const word = words[wordIndex];
+    wordElement.textContent = word.slice(0, characterIndex);
+
+    if (!deleting && characterIndex < word.length) {
+      characterIndex++;
+      typewriterTimer = setTimeout(typeNext, 105);
+      return;
+    }
+
+    if (!deleting) {
+      deleting = true;
+      typewriterTimer = setTimeout(typeNext, 1500);
+      return;
+    }
+
+    if (characterIndex > 0) {
+      characterIndex--;
+      typewriterTimer = setTimeout(typeNext, 60);
+      return;
+    }
+
+    deleting = false;
+    wordIndex = (wordIndex + 1) % words.length;
+    typewriterTimer = setTimeout(typeNext, 250);
+  }
+
+  typeNext();
+}
 
 function setLang(lang) {
   currentLang = lang;
@@ -1584,9 +1642,11 @@ function setLang(lang) {
   }
 
   document.querySelectorAll('[data-en]').forEach(function(el) {
-    if (el.classList.contains('lang-option')) return;
+    if (el.classList.contains('lang-option') || el.classList.contains('typewriter-word')) return;
     el.textContent = lang === 'sw' ? el.dataset.sw : el.dataset.en;
   });
+
+  startHeroTypewriter();
 
   document.querySelectorAll('select option[data-en]').forEach(function(opt) {
     opt.textContent = lang === 'sw' ? opt.dataset.sw : opt.dataset.en;
@@ -1599,6 +1659,8 @@ function setLang(lang) {
   const submitBtn = document.querySelector('#contactForm button.btn-primary');
   if (submitBtn) submitBtn.textContent = lang === 'sw' ? 'Tuma Ujumbe ⚡' : 'Send Message ⚡';
 }
+
+startHeroTypewriter();
 
 // ── GALLERY ──
 const GALLERY_IMAGES = [
